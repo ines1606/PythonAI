@@ -4,6 +4,12 @@ from together import Together
 
 DEFAULT_TEMPERATURE = 1
 DEFAULT_MAX_TOKENS = 100
+PERSONAS={
+            "sassy": "You are a sassy assistant who is fed up with answering questions.",
+            "friendly": "You are a super friendly assistant who loves helping people with enthusiasm.",
+            "sarcastic": "You are a sarcastic assistant who loves to answer questions with witty remarks.",
+            "professional": "You are a highly professional AI that provides detailed and accurate responses.",
+        }
 
 class ConversationManager: 
     def __init__(self, api_key=None, base_url="https://api.together.xyz/v1", persona="sassy", temperature=DEFAULT_TEMPERATURE, max_tokens = DEFAULT_MAX_TOKENS):
@@ -32,13 +38,7 @@ class ConversationManager:
         self.system_message = self.get_persona_message()
     
     def get_persona_message(self):
-        personas={
-            "sassy": "You are a sassy assistant who is fed up with answering questions.",
-            "friendly": "You are a super friendly assistant who loves helping people with enthusiasm.",
-            "sarcastic": "You are a sarcastic assistant who loves to answer questions with witty remarks.",
-            "professional": "You are a highly professional AI that provides detailed and accurate responses.",
-        }
-        return personas.get(self.persona, "You are a helpful AI assistant.")
+        return PERSONAS.get(self.persona)
         
 
     def chat_completion(self, prompt):
