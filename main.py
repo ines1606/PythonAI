@@ -1,17 +1,22 @@
 import os
 from dotenv import load_dotenv
 from together import Together
+import ConversationManager as c
 load_dotenv() # loads api key from .env file
 
 #print("hello world!!", os.getenv("TOGETHER_API_KEY"))
 
-client = Together() # recognizes the api key and returns it to the client 
+c_manager = c.ConversationManager(persona = "sassy")
 
-stream = client.chat.completions.create(
-  model="meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo",
-  messages=[{"role": "user", "content": "What are the top 3 things to do in New York?"}],
-  stream=True,
-)
+while True: 
+    user_input = input("Du: ")
+    if user_input.lower() in ["exit", "quit", "q"]:
+        break
 
-for chunk in stream:
-  print(chunk.choices[0].delta.content or "", end="", flush=True)
+    response = c_manager.chat_completion(user_input)
+
+    print("Bot: ", end="", flush=True)
+    for chunk in response:
+        print(chunk, end="", flush=True)
+    print("\n")
+
