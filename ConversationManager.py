@@ -19,29 +19,23 @@ class ConversationManager:
         self.client = Together()
         self.model="meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo"
         self.persona = persona.lower() # convert string to lower-case 
-
-        if 0 <= temperature <= 1:
-            self.temperature = temperature # between 0 and 1, determines degree of randomness 
-        else: 
-            print("Not a valid temperature [0,1], setting it to default value 1")
-            self.temperature = DEFAULT_TEMPERATURE
-
-        if 50 <= max_tokens <= 500:
-            self.max_tokens = max_tokens
-        else: 
-            print("Not a valid amount for tokens [50,500], setting it to default value 100")
-            max_tokens = DEFAULT_MAX_TOKENS
+        self.temperature = temperature
+        self.max_tokens = max_tokens
+        self.system_message = self.get_persona_message(self.persona)
+        self.conversation_history = [{"role":"system", "content": self.system_message}]
 
         if not self.api_key: 
             raise ValueError("Missing API key!")
         
-        self.system_message = self.get_persona_message()
+        
     
-    def get_persona_message(self):
-        return PERSONAS.get(self.persona)
+    def get_persona_message(self, persona):
+        return PERSONAS.get(persona)
         
 
     def chat_completion(self, prompt):
+        # store prompt from client in conversation history 
+        self.conversation_history.append({"role":"user", "content":prompt})
         response = self.client.chat.completions.create(
             model = self.model,
             messages=[{"role":"system", "content": self.system_message},

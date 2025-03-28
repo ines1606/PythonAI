@@ -21,7 +21,7 @@ def get_temperature():
             if 0 <= temperature <= 1:
                 return temperature
             else:
-                print("Invalid temperature! Please enter a value between 0 and 1.")
+                print("Invalid precision! Please enter a value between 0 and 1.")
         except ValueError:
             print("Please enter a valid number.")
 
