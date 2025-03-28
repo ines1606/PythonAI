@@ -38,8 +38,7 @@ class ConversationManager:
         self.conversation_history.append({"role":"user", "content":prompt})
         response = self.client.chat.completions.create(
             model = self.model,
-            messages=[{"role":"system", "content": self.system_message},
-                      {"role":"user", "content": prompt}],
+            messages=self.conversation_history,
             stream=False, # api returns answer in one chunk instead of streaming it gradually 
             temperature=self.temperature,
             max_tokens=self.max_tokens,

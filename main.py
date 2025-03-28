@@ -44,16 +44,18 @@ def main():
         user_input = input("You: ")
         if user_input.lower() in ["exit", "quit", "q"]:
             break
+        if user_input.lower() == "history":
+            print(c_manager.print_history())
+        else:
+            response = c_manager.chat_completion(user_input)
 
-        response = c_manager.chat_completion(user_input)
-
-        print("Bot: ", end="", flush=True)
-        for chunk in response:
-            print(chunk, end="", flush=True)
+            print("Bot: ", end="", flush=True)
+            for chunk in response:
+                print(chunk, end="", flush=True)
         print("\n")
 
         
-        print(f"history: {c_manager.print_history()}") 
+        #print(f"history: {c_manager.print_history()}") 
         
 
 if __name__ == "__main__":
