@@ -38,7 +38,7 @@ def get_max_tokens():
 
 def main():
     print("start")
-    c_manager = c.ConversationManager(persona = get_persona(), temperature=get_temperature(), max_tokens=get_max_tokens)
+    c_manager = c.ConversationManager(persona = get_persona(), temperature=get_temperature(), max_tokens=get_max_tokens())
 
     while True: 
         user_input = input("You: ")
@@ -51,6 +51,10 @@ def main():
         for chunk in response:
             print(chunk, end="", flush=True)
         print("\n")
+
+        
+        print(f"history: {c_manager.print_history()}") 
+        
 
 if __name__ == "__main__":
     main()

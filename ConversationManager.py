@@ -44,4 +44,10 @@ class ConversationManager:
             temperature=self.temperature,
             max_tokens=self.max_tokens,
         )
-        return response.choices[0].message.content
+        ai_response = response.choices[0].message.content
+        self.conversation_history.append({"role":"assistant", "content":ai_response})
+        return ai_response
+    
+    def print_history(self):
+        for message in self.conversation_history:
+            print(f"{message['role'].capitalize()}: {message['content']}")
