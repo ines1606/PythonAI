@@ -37,15 +37,15 @@ def get_max_tokens():
             print("Please enter a valid number.")
 
 def main():
-    print("start")
+    
     c_manager = c.ConversationManager(persona = get_persona(), temperature=get_temperature(), max_tokens=get_max_tokens())
-
     while True: 
         user_input = input("You: ")
         if user_input.lower() in ["exit", "quit", "q"]:
             break
         if user_input.lower() == "history":
             print(c_manager.print_history())
+            print(f"Tokens used in history: {c_manager.total_tokens_used()}")
         else:
             response = c_manager.chat_completion(user_input)
 
