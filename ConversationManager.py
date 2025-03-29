@@ -5,7 +5,7 @@ import tiktoken
 
 DEFAULT_TEMPERATURE = 1
 DEFAULT_MAX_TOKENS = 100
-DEFAULT_TOKEN_BUDGET = 5000
+DEFAULT_TOKEN_BUDGET = 4000
 PERSONAS={
             "sassy": "You are a sassy assistant who is fed up with answering questions.",
             "friendly": "You are a super friendly assistant who loves helping people with enthusiasm.",
@@ -41,6 +41,7 @@ class ConversationManager:
         
 
     def chat_completion(self, prompt):
+        self.enforce_token_budget()
         # store prompt from client in conversation history 
         self.conversation_history.append({"role":"user", "content":prompt})
 
@@ -70,3 +71,13 @@ class ConversationManager:
         for message in contents: 
             self.token_count += self.count_tokens(message)
         return self.token_count
+    
+    def enforce_token_budget(self):
+        remaining_token = DEFAULT_TOKEN_BUDGET - self.total_tokens_used()
+        print(f"remaining token: {remaining_token}")
+        if remaining_token == 0:
+            for i, msg in enumerate(self.conversation_history):
+                if msg["role"] == "user":
+                    del self.conversation_history[i]  
+                    #TODO: add those token back to remaining token!!!
+                    break  
