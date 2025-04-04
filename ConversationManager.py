@@ -5,7 +5,7 @@ import tiktoken
 
 DEFAULT_TEMPERATURE = 1
 DEFAULT_MAX_TOKENS = 100
-DEFAULT_TOKEN_BUDGET = 4000
+DEFAULT_TOKEN_BUDGET = 20
 PERSONAS={
             "sassy": "You are a sassy assistant who is fed up with answering questions.",
             "friendly": "You are a super friendly assistant who loves helping people with enthusiasm.",
@@ -73,11 +73,13 @@ class ConversationManager:
         return self.token_count
     
     def enforce_token_budget(self):
+        print(f"remaining token before: {DEFAULT_TOKEN_BUDGET}")
         remaining_token = DEFAULT_TOKEN_BUDGET - self.total_tokens_used()
-        print(f"remaining token: {remaining_token}")
-        if remaining_token == 0:
-            for i, msg in enumerate(self.conversation_history):
-                if msg["role"] == "user":
-                    del self.conversation_history[i]  
-                    #TODO: add those token back to remaining token!!!
-                    break  
+        print(f"remaining token after: {remaining_token}")
+        if remaining_token <= 0: 
+            #TODO: why is number in total tokens used not smaller after smaller conversation history??
+            self.conversation_history.pop(1)
+            self.print_history()
+        else: 
+            print("enough tokens!")
+        
